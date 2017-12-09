@@ -11,15 +11,16 @@ def main(argv):
    input1 = ''
    input2 = ''
    outputfile = ''
+   usage_str = "-f <first input file> -s <second input file> -o <outputfile>"
    gain = 1.0
    try:
       opts, args = getopt.getopt(argv, "hf:s:g:o:", ["first=", "second=", "gain=", "out="])
    except getopt.GetoptError:
-      print ('test.py -i <inputfile> -o <outputfile>')
+      print(usage_str)
       sys.exit(2)
    for opt, arg in opts:
       if opt == '-h':
-         print ('test.py -i <inputfile> -o <outputfile>')
+         print(usage_str)
          sys.exit()
       elif opt in ("-f", "--first"):
          input1 = arg
@@ -32,6 +33,16 @@ def main(argv):
 
    img1 = cv2.imread(input1, cv2.IMREAD_GRAYSCALE)
    img2 = cv2.imread(input2, cv2.IMREAD_GRAYSCALE)
+   if img1 is None:
+      print("invalid first image ", input1)
+      print(usage_str)
+      exit(2)
+   if img1 is None:
+      print("invalid second image ", input2)
+      print(usage_str)
+      exit(2)
+
+
    gray1 = numpy.float32(img1) * 1.0/255.0
    gray2 = numpy.float32(img2) * 1.0/255.0
    im3 = 0.5 + (gray1-gray2) * gain
